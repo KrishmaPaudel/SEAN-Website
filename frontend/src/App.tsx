@@ -22,7 +22,7 @@ function App() {
           onClick={() => setCount(count + 1)}
           className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg transition text-white font-semibold"
         >
-          You clicked {count} times
+          You clicked {count} times.
         </button>
 
       </div>
