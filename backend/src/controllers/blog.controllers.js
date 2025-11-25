@@ -24,7 +24,7 @@ const createBlog = asyncHandler(async (req, res) => {
   }
   return res
     .status(201)
-    .json(new ApiResponse(200, blog, "Blog created successfully"));
+    .json(ApiResponse.data(200, blog, "blog created successfully"));
 });
 
 const getAllBlogs = asyncHandler(async (req, res) => {
@@ -34,30 +34,24 @@ const getAllBlogs = asyncHandler(async (req, res) => {
 
   const skip = (page - 1) * limit;
 
-  const blogs = await Blog.find({})
-    .sort({ createdAt: -1 })
-    .skip(skip)
-    .limit(limit);
+  const [blogs, totalBlogs] = await Promise.all([
+    Blog.find({}).sort({ createdAt: -1 }).skip(skip).limit(limit),
+    Blog.countDocuments(),
+  ]);
 
-  // Get total count for pagination info
-  const totalBlogs = await Blog.countDocuments();
-  const totalPages = Math.ceil(totalBlogs / limit);
-
-  const paginationData = {
-    blogs,
-    pagination: {
-      currentPage: page,
-      totalPages,
-      totalBlogs,
-      limit,
-      hasNextPage: page < totalPages,
-      hasPrevPage: page > 1
-    }
-  };
+  const hasNext = page * limit < totalBlogs;
 
   return res
     .status(200)
-    .json(new ApiResponse(200, paginationData, "Blogs fetched successfully"));
+    .json(
+      ApiResponse.pagination(
+        200,
+        blogs,
+        totalBlogs,
+        hasNext,
+        "blogs fetched successfully"
+      )
+    );
 });
 
 export { createBlog, getAllBlogs };
