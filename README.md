@@ -1,1 +1,1 @@
-# NCIT Software Department Website
+## SEAN Website
