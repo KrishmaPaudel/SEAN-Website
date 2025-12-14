@@ -89,9 +89,31 @@ const uploadMultiple = (fieldName, maxCount = 5, folder = 'uploads') => {
                 uploadToCloudinary(file.buffer, folder)
             );
 
-            const results = await Promise.all(uploadPromises);
+            const settledResults = await Promise.allSettled(uploadPromises);
 
-            req.cloudinaryResults = results.map(result => ({
+            const successfulUploads = [];
+            const failedUploads = [];
+
+            settledResults.forEach((result, idx) => {
+                if (result.status === 'fulfilled') {
+                    successfulUploads.push(result.value);
+                } else {
+                    failedUploads.push({ index: idx, reason: result.reason });
+                }
+            });
+
+            if (failedUploads.length > 0) {
+                // Cleanup: delete any successful uploads
+                await Promise.all(
+                    successfulUploads.map(upload =>
+                        deleteFromCloudinary(upload.public_id)
+                    )
+                );
+                // Pass error to next middleware
+                return next(new ApiError(500, 'One or more images failed to upload. All successful uploads have been cleaned up.'));
+            }
+
+            req.cloudinaryResults = successfulUploads.map(result => ({
                 public_id: result.public_id,
                 secure_url: result.secure_url,
                 url: result.url,
