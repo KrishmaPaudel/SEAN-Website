@@ -1,0 +1,38 @@
+.about-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2vw;
+    width: 100%;
+    align-items: flex-start;
+}
+
+.left-fixed {
+    position: sticky;
+    top: 80px;
+    align-self: flex-start;
+    min-width: 220px;
+    max-width: 500px;
+    padding-top:40px;
+    padding-bottom:40px;
+    width: 25vw;
+}
+
+.right-scroll {
+    flex: 1 1 300px;
+}
+
+@media (max-width: 768px) {
+    .about-content {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .left-fixed,
+    .right-scroll {
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+        position: static;
+        overflow: auto;
+        top: auto;
+    }
+}
