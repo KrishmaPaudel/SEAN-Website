@@ -1,9 +1,9 @@
 // import bgCurve from "../assets/bg.png"
 // import  bgCurve  from '../assets/bgCurve1.svg';
 // import  cloud  from '../assets/cloud.svg';
-import  bulb from '../assets/bulb.svg';
-import  body from '../assets/body.svg';
-import Header from "../components/header"
+import bulb from "../assets/bulb.svg";
+import body from "../assets/body.svg";
+import Header from "../components/header";  
 function App() {
   return(
     
@@ -18,6 +18,7 @@ function App() {
     <p className='  text-[min(2vw,20px)] text-[#444444]'>A futuristic network connecting software enthusiasts 
 with projects, mentorship, and industry opportunities.</p>
 </div>
+
 <img src={bulb} alt="" className='' />
 
 
